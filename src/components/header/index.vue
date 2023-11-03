@@ -15,8 +15,8 @@
 import { inject, computed } from "vue";
 import { withBase } from "vitepress";
 import { themeConfig } from "../../compositions/configProvider";
-import Nav from "../Nav/index.vue";
-import type { INavProps } from "../Nav/nav";
+import Nav from "../nav/index.vue";
+import type { INavProps } from "../nav/nav";
 
 const props = defineProps<INavProps>();
 
