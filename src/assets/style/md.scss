@@ -1,0 +1,95 @@
+@use "sass:map";
+@use "./variables.scss" as val;
+@use "./mixins.scss" as mix;
+
+.pure-doc {
+  font-size: 1rem;
+  margin: auto;
+  max-width: 700px;
+  div[class*="language-"] {
+    position: relative;
+    & > span.lang {
+      position: absolute;
+      top: 2px;
+      right: 8px;
+      z-index: 2;
+      font-size: 12px;
+      font-weight: 500;
+      color: val.$code-lang-color;
+      transition: color 0.4s, opacity 0.4s;
+    }
+    pre.shiki {
+      background-color: val.$code-background-color;
+      border-radius: 6px;
+      padding: map.get(val.$code-padding, top) map.get(val.$code-padding, right);
+      overflow-y: auto;
+      overflow-x: hidden;
+      line-height: val.$code-line-height;
+    }
+    &:hover > button.copy {
+      opacity: 1;
+    }
+
+    button.copy {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      z-index: 3;
+      display: block;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      border: 1px solid #e2e2e3;
+      width: 40px;
+      height: 40px;
+      background-color: val.$code-background-color;
+      opacity: 0;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='20' width='20' stroke='rgba(128,128,128,1)' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2'/%3E%3C/svg%3E");
+      background-position: 50%;
+      background-size: 20px;
+      background-repeat: no-repeat;
+      transition: opacity 0.4s;
+      &.copied {
+        border-radius: 0 4px 4px 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='20' width='20' stroke='rgba(128,128,128,1)' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4'/%3E%3C/svg%3E");
+      }
+      &:hover {
+        background-color: #fff;
+      }
+    }
+    .line-numbers-wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 3;
+      padding-top: map.get(val.$code-padding, top);
+      width: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: val.$code-lang-color;
+      font-family: val.$code-font-family;
+      line-height: val.$code-line-height;
+    }
+  }
+
+  code {
+    background: val.$code-background-color;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    white-space: pre;
+    -webkit-font-smoothing: auto;
+    overflow: auto;
+    font-family: val.$code-font-family;
+    display: inline-block;
+    width: 100%;
+    @include mix.scroll-bar-style(6px);
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid val.$divider-color;
+    margin: 1.8rem 0;
+  }
+}

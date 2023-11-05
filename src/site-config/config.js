@@ -1,6 +1,8 @@
 export const baseConfig = {
   cleanUrls: true,
   markdown: {
-    theme: "material-theme-palenight",
+    theme: "github-light",
+    lineNumbers: true,
+    html: true,
   },
 };

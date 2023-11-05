@@ -15,7 +15,3 @@ body {
 div {
   box-sizing: border-box;
 }
-
-div[class*="language-"] pre.material-theme-palenight {
-  background-color: #292d3e;
-}
