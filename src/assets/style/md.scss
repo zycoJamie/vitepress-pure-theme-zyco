@@ -65,12 +65,26 @@
       left: 0;
       z-index: 3;
       padding-top: map.get(val.$code-padding, top);
-      width: 32px;
+      width: map.get(val.$code-padding, right);
       text-align: center;
       font-size: 0.95rem;
       color: val.$code-lang-color;
       font-family: val.$code-font-family;
       line-height: val.$code-line-height;
+    }
+
+    code {
+      background: val.$code-background-color;
+      border-radius: 3px;
+      font-size: 0.95rem;
+      white-space: pre;
+      -webkit-font-smoothing: auto;
+      overflow: auto;
+      font-family: val.$code-font-family;
+      display: inline-block;
+      width: 100%;
+      padding: 0px;
+      @include mix.scroll-bar-style(6px);
     }
   }
 
@@ -78,18 +92,162 @@
     background: val.$code-background-color;
     border-radius: 3px;
     font-size: 0.95rem;
+    font-variant-ligatures: none;
+    padding: 3px 5px;
     white-space: pre;
     -webkit-font-smoothing: auto;
-    overflow: auto;
-    font-family: val.$code-font-family;
-    display: inline-block;
-    width: 100%;
-    @include mix.scroll-bar-style(6px);
   }
 
   hr {
     border: none;
     border-top: 1px solid val.$divider-color;
     margin: 1.8rem 0;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  ul {
+    padding-left: 2rem;
+    & > li::marker {
+      font-size: 12px;
+      color: val.$anchor-color;
+    }
+  }
+
+  ol {
+    padding-left: 2rem;
+    & > li::marker {
+      font-weight: 500;
+    }
+  }
+
+  a {
+    font-weight: 500;
+    color: val.$anchor-color;
+    text-decoration-style: dotted;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    position: relative;
+    font-weight: 600;
+    line-height: 1.5;
+    outline: none;
+    .header-anchor {
+      position: absolute;
+      top: 0;
+      left: -1em;
+      text-decoration: none;
+      &::before {
+        content: "#";
+        color: val.$anchor-color;
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+
+    &:hover {
+      .header-anchor::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  h1,
+  h2 {
+    margin: 1rem 0;
+  }
+  h3,
+  h4 {
+    margin: 0.7rem 0;
+  }
+  h5,
+  h6 {
+    margin: 0.3rem 0;
+  }
+
+  blockquote {
+    background: #f1f2f4;
+    font-weight: 400;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 0;
+    box-sizing: border-box;
+    p {
+      margin: 0;
+    }
+  }
+
+  table {
+    display: block;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    overflow-x: auto;
+    thead {
+      background-color: #f6f6f7;
+      th {
+        font-weight: 500;
+      }
+    }
+    tbody tr {
+      background-color: #fff;
+    }
+
+    th,
+    td {
+      border: 1px solid #e2e2e3;
+      padding: 0.6em 1em;
+    }
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .custom-block {
+    margin: 28px 0;
+    padding: 16px 16px 8px;
+    border-radius: 8px;
+    overflow-x: auto;
+    position: relative;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 500;
+    color: map.get(val.$custom-block, default-color);
+    background-color: map.get(val.$custom-block, default-bg-color);
+    .custom-block-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: map.get(val.$custom-block, title-color);
+    }
+    &.info {
+      background-color: map.get(val.$custom-block, info, bg-color);
+    }
+    &.tip {
+      background-color: map.get(val.$custom-block, tip, bg-color);
+    }
+    &.warning {
+      background-color: map.get(val.$custom-block, warning, bg-color);
+    }
+    &.danger {
+      background-color: map.get(val.$custom-block, danger, bg-color);
+    }
+    &.details {
+      background-color: map.get(val.$custom-block, details, bg-color);
+      summary {
+        margin: 0 0 8px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+    }
   }
 }

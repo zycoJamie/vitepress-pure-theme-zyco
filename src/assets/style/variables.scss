@@ -8,3 +8,24 @@ $code-line-height: 23px;
 $code-font-family: "JetBrains Mono", Menlo, Consolas, Monaco, "Courier New",
   monospace;
 $divider-color: rgba(60, 60, 60, 0.12);
+$anchor-color: #73b6ea;
+$custom-block: (
+  default-bg-color: #f9f9f9,
+  default-color: rgba(0, 0, 0, 0.55),
+  title-color: rgba(60, 60, 67),
+  info: (
+    bg-color: rgba(101, 117, 133, 0.16),
+  ),
+  tip: (
+    bg-color: rgba(100, 108, 255, 0.16),
+  ),
+  warning: (
+    bg-color: rgba(234, 179, 8, 0.16),
+  ),
+  danger: (
+    bg-color: rgba(244, 63, 94, 0.16),
+  ),
+  details: (
+    bg-color: rgba(142, 150, 170, 0.14),
+  ),
+);

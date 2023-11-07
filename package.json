@@ -34,5 +34,9 @@
   "peerDependencies": {
     "sass": "^1.69.5",
     "vitepress": "^1.0.0-rc.24"
+  },
+  "dependencies": {
+    "markdown-it-sub": "^1.0.0",
+    "markdown-it-sup": "^1.0.0"
   }
 }
