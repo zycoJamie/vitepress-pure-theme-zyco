@@ -27,6 +27,7 @@
   "author": "zyco",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.9.0",
     "sass": "^1.69.5",
     "vitepress": "^1.0.0-rc.24",
     "vue": "^3.3.7"
@@ -36,6 +37,7 @@
     "vitepress": "^1.0.0-rc.24"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0"
   }
