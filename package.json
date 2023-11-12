@@ -29,11 +29,13 @@
   "devDependencies": {
     "@types/node": "^20.9.0",
     "sass": "^1.69.5",
+    "vite": "^4.5.0",
     "vitepress": "^1.0.0-rc.24",
     "vue": "^3.3.7"
   },
   "peerDependencies": {
     "sass": "^1.69.5",
+    "vite": "^4.5.0",
     "vitepress": "^1.0.0-rc.24"
   },
   "dependencies": {

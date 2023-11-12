@@ -12,11 +12,15 @@ import Header from "../header/index.vue";
 import { useMatchPath, useMatchPostPath } from "../../compositions/check";
 import HomeContent from "../content/HomeContent.vue";
 import PostContent from "../content/PostContent.vue";
+import ArticlesContent from "../content/ArticlesContent.vue";
 
 const Navlist = ref([
   { name: "Home", path: "/", component: shallowRef(HomeContent) },
-  { name: "Articles", path: "/articles" },
-  { name: "Classes", path: "/classes" },
+  {
+    name: "Articles",
+    path: "/articles",
+    component: shallowRef(ArticlesContent),
+  },
   { name: "About", path: "/about" },
 ]);
 
