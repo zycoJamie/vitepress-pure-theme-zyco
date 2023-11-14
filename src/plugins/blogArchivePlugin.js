@@ -10,9 +10,13 @@ export default function blogArchivePlugin(config) {
   let viteConfig = null;
   let posts = {
     all: [], // 原始博客列表
-    date: [], // 按照年月日排序
+    date: {}, // 按照年月日排序
     class: {}, // 按照类别分类&&年月日排序
+    dateTags: [], // 博客的所有year标签
+    classTags: [], // 博客的所有class标签
   };
+  const DEFAULT_CLASS = "class";
+  const DEFAULT_YEAR = "2000";
   return {
     name: "vite-plugin-vitepress-blog-archive",
     enforce: "post",
@@ -57,14 +61,14 @@ export default function blogArchivePlugin(config) {
       let pendingTreatData = postListWithClasses.map((fileMatter) => {
         yearReg.lastIndex = 0;
         const resYear = yearReg.exec(fileMatter.date);
-        const fullYear = resYear ? resYear[0] : "2000";
+        const fullYear = resYear ? resYear[0] : DEFAULT_YEAR;
         normalFileNameReg.lastIndex = 0;
         const regRes = normalFileNameReg.exec(fileMatter.fileName);
         const resFileName = regRes ? regRes[3] : fileMatter.fileName;
 
         // 归档后的新文件名
         const archiveFileName = `${fullYear}-${
-          fileMatter.class || "class"
+          fileMatter.class || DEFAULT_CLASS
         }-${basename(resFileName, ".md")}`;
         // runtime访问文件的url
         const fileUrL = `${postDirWithoutCwd}/${archiveFileName}`;
@@ -78,10 +82,54 @@ export default function blogArchivePlugin(config) {
           .catch(() => {});
         return {
           ...fileMatter,
+          year: fullYear,
           fileName: archiveFileName,
           url: fileUrL,
         };
       });
+      /******* 注入数据预处理 *******/
+      const mapByYear = {}; // 按年分类
+      const mapByClass = {}; // 按类别分类
+      pendingTreatData.map((item) => {
+        if (!mapByYear[item.year]) {
+          mapByYear[item.year] = [];
+        }
+        if (!mapByClass[item.class || DEFAULT_CLASS]) {
+          mapByClass[item.class || DEFAULT_CLASS] = [];
+        }
+        mapByYear[item.year].push({ ...item });
+        mapByClass[item.class || DEFAULT_CLASS].push({ ...item });
+      });
+      Object.keys(mapByYear).map((year) => {
+        // 按年分类，时间倒序
+        mapByYear[year].sort((b, p) => {
+          const preDate = new Date(p.date);
+          const preTime = !!preDate.getTime() ? preDate.getTime() : Date.now();
+          const backDate = new Date(b.date);
+          const backTime = !!backDate.getTime()
+            ? backDate.getTime()
+            : Date.now();
+          return preTime - backTime;
+        });
+      });
+      posts.date = mapByYear;
+      posts.dateTags = Object.keys(mapByYear);
+
+      Object.keys(mapByClass).map((classes) => {
+        // 按类别，时间倒序
+        mapByClass[classes].sort((b, p) => {
+          const preDate = new Date(p.date);
+          const preTime = !!preDate.getTime() ? preDate.getTime() : Date.now();
+          const backDate = new Date(b.date);
+          const backTime = !!backDate.getTime()
+            ? backDate.getTime()
+            : Date.now();
+          return preTime - backTime;
+        });
+      });
+      posts.class = mapByClass;
+      posts.classTags = Object.keys(mapByClass);
+
       posts.all = pendingTreatData;
     },
     configResolved(resolvedConfig) {
