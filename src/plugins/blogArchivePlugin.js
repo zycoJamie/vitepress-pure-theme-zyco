@@ -113,7 +113,7 @@ export default function blogArchivePlugin(config) {
         });
       });
       posts.date = mapByYear;
-      posts.dateTags = Object.keys(mapByYear);
+      posts.dateTags = Object.keys(mapByYear).reverse();
 
       Object.keys(mapByClass).map((classes) => {
         // 按类别，时间倒序

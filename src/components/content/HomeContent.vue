@@ -14,21 +14,19 @@
 <script setup lang="ts">
 import { data, IMetaPost } from "../../support/posts.data.mjs";
 import { computed } from "vue";
-import { useSortPosts, useFormatPost } from "../../compositions/post";
-import { useRouter } from "vitepress";
+import {
+  useSortPosts,
+  useFormatPost,
+  usePostRoute,
+} from "../../compositions/post";
 
 console.log("test", data);
-const router = useRouter();
 const posts = computed<(IMetaPost & { url: string })[]>(() =>
   data.map((item) => ({ ...item.frontmatter, url: item.url }))
 );
 const recentPosts = useSortPosts(posts);
 const { formatPostDate } = useFormatPost();
-
-// 路由文章详情
-const goToArticle = (path: string) => {
-  router.go(path);
-};
+const { goToArticle } = usePostRoute();
 </script>
 
 <style lang="scss" scoped>

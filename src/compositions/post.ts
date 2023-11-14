@@ -1,5 +1,6 @@
 import { Ref, computed } from "vue";
 import type { IMetaPost } from "../support/posts.data.mjs";
+import { useRouter } from "vitepress";
 
 // blog排序
 export const useSortPosts = <T extends IMetaPost[]>(posts: Ref<T>) => {
@@ -17,5 +18,15 @@ export const useFormatPost = () => {
   };
   return {
     formatPostDate: date,
+  };
+};
+
+// 路由文章详情
+export const usePostRoute = () => {
+  const router = useRouter();
+  return {
+    goToArticle: (path: string) => {
+      router.go(path);
+    },
   };
 };
