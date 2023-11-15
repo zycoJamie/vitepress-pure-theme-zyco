@@ -1,6 +1,11 @@
 <template>
   <div class="content">
-    <h1 class="main-title">Articles</h1>
+    <h1
+      class="main-title"
+      :style="{ marginBottom: isDateList ? '0px' : '40px' }"
+    >
+      Articles
+    </h1>
     <template v-if="isDateList" v-for="year in dateTags" :key="year">
       <h2 class="year">{{ year }}</h2>
       <article
@@ -10,11 +15,24 @@
       >
         <div class="title" @click="goToArticle(post.url)">{{ post.title }}</div>
         <div class="divider"></div>
+        <time :datetime="post.date">{{
+          formatPostDateWithoutYear(post.date)
+        }}</time>
+      </article>
+    </template>
+    <template v-else>
+      <article
+        class="article"
+        v-for="(post, idx) in classPostsList[curTag]"
+        :key="idx"
+      >
+        <div class="title" @click="goToArticle(post.url)">{{ post.title }}</div>
+        <div class="divider"></div>
         <time :datetime="post.date">{{ formatPostDate(post.date) }}</time>
       </article>
     </template>
   </div>
-  <post-class-list />
+  <post-class-list v-model:tag="curTag" />
 </template>
 
 <script setup lang="ts">
@@ -24,7 +42,7 @@ import PostClassList from "../post-class/index.vue";
 
 const { posts } = usePosts();
 const { goToArticle } = usePostRoute();
-const { formatPostDate } = useFormatPost();
+const { formatPostDateWithoutYear, formatPostDate } = useFormatPost();
 
 console.log("ArticlesContent ", posts);
 
@@ -32,7 +50,8 @@ const classPostsList = computed(() => posts["class"]);
 const datePostsList = computed(() => posts["date"]);
 const dateTags = computed(() => posts.dateTags);
 
-const isDateList = ref(true); // 是否按日期分类
+const isDateList = computed(() => curTag.value === "date"); // 是否按日期分类
+const curTag = ref("date"); // 当前选中分类
 </script>
 
 <style lang="scss" scoped>

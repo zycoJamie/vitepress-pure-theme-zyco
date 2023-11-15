@@ -1,3 +1,3 @@
 export interface IPostClassProps {
-  cur: string;
+  tag: string;
 }
