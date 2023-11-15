@@ -3,6 +3,7 @@ interface IPost {
   class: string;
   date: string;
   year: string;
+  brief: string;
   fileName: string;
   url: string;
   [key in string]: string | number;

@@ -3,20 +3,22 @@ import { readdir, copyFile, readFile, rm, constants } from "node:fs/promises";
 import { cwd } from "node:process";
 import matter from "gray-matter";
 import { normalizePath } from "vite";
+import MarkdownIt from "markdown-it";
 
 export default function blogArchivePlugin(config) {
   const virtualModule = "virtual:blog/archive/usePosts";
   const resolvedVirtualModule = "\0" + virtualModule;
   let viteConfig = null;
   let posts = {
-    all: [], // 原始博客列表
-    date: {}, // 按照年月日排序
+    all: [], // 完整博客列表并按时间倒序
+    date: {}, // 按年分类并排序
     class: {}, // 按照类别分类&&年月日排序
     dateTags: [], // 博客的所有year标签
     classTags: [], // 博客的所有class标签
   };
   const DEFAULT_CLASS = "class";
   const DEFAULT_YEAR = "2000";
+  const mdInst = new MarkdownIt({ html: true });
   return {
     name: "vite-plugin-vitepress-blog-archive",
     enforce: "post",
@@ -50,9 +52,25 @@ export default function blogArchivePlugin(config) {
         .filter((item) => item.status === "fulfilled")
         .map((item) => {
           const frontMatter = matter(item.value);
+          // 自动给含有文本内容的博客生成摘要
+          let brief = "";
+          mdInst.parseInline(frontMatter.content).map((inline) => {
+            (inline.children ?? []).map((token) => {
+              if (token.type === "text" && !token.markup) {
+                /^(>\s*)+/gi.test(token.content) &&
+                  (token.content = ` <code>${token.content.replace(
+                    /^(>\s*)+/gi,
+                    ""
+                  )}</code> `);
+                brief += token.content;
+              }
+            });
+          });
+
           return {
             ...(frontMatter.data || {}),
             fileName: item.fileName,
+            brief: brief ? `${brief.slice(0, 100)}......` : "",
           };
         });
 
@@ -130,7 +148,10 @@ export default function blogArchivePlugin(config) {
       posts.class = mapByClass;
       posts.classTags = Object.keys(mapByClass);
 
-      posts.all = pendingTreatData;
+      posts.all = Array.prototype.concat.apply(
+        posts.all,
+        posts.dateTags.map((year) => posts.date[year])
+      );
     },
     configResolved(resolvedConfig) {
       viteConfig = resolvedConfig;

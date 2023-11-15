@@ -6,25 +6,18 @@
         <div @click="goToArticle(post.url)">{{ post.title }}</div>
       </h2>
       <time>{{ formatPostDate(post.date) }}</time>
-      <div>{{ post.brief }}</div>
+      <div class="brief" home-content v-html="post.brief"></div>
     </article>
   </div>
 </template>
 
 <script setup lang="ts">
-import { data, IMetaPost } from "../../support/posts.data.mjs";
+// import { data, IMetaPost } from "../../support/posts.data.mjs";
 import { computed } from "vue";
-import {
-  useSortPosts,
-  useFormatPost,
-  usePostRoute,
-} from "../../compositions/post";
+import { useFormatPost, usePostRoute } from "../../compositions/post";
 
-console.log("test", data);
-const posts = computed<(IMetaPost & { url: string })[]>(() =>
-  data.map((item) => ({ ...item.frontmatter, url: item.url }))
-);
-const recentPosts = useSortPosts(posts);
+const { posts } = usePosts();
+const recentPosts = computed(() => posts.all.slice(0, 7));
 const { formatPostDate } = useFormatPost();
 const { goToArticle } = usePostRoute();
 </script>
@@ -57,6 +50,24 @@ const { goToArticle } = usePostRoute();
     time {
       color: #616e7c;
       margin-bottom: 8px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@use "../../assets/style/variables.scss" as val;
+.post {
+  .brief[home-content] {
+    code {
+      background: val.$code-background-color;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-variant-ligatures: none;
+      padding: 3px 5px;
+      white-space: pre;
+      -webkit-font-smoothing: auto;
+      font-family: "JetBrains Mono", Menlo, Consolas, Monaco, "Courier New",
+        monospace;
     }
   }
 }
