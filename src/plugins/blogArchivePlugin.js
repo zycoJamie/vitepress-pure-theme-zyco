@@ -149,7 +149,7 @@ export default function blogArchivePlugin(config) {
       posts.classTags = Object.keys(mapByClass);
 
       posts.all = Array.prototype.concat.apply(
-        posts.all,
+        [],
         posts.dateTags.map((year) => posts.date[year])
       );
     },

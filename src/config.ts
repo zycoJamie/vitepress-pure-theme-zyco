@@ -7,4 +7,8 @@ export interface PureThemeConfig {
   name: string; // 用户名
   brief: string; // 简介
   postDir?: string; // 默认 /posts, 博客文章存放的文件夹，基于文档项目根目录的绝对路径（e. /posts）
+  footer?: Partial<{
+    text: string; // 配置主页footer文案
+    route: "articles" | "about"; // 该区域默认点击跳转Articles页面
+  }>;
 }

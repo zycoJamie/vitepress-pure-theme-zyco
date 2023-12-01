@@ -1,25 +1,47 @@
 <template>
   <div class="content">
     <h1 class="main-title">Recent Articles</h1>
-    <article class="post" v-for="(post, idx) in recentPosts" :key="idx">
-      <h2 class="title">
-        <div @click="goToArticle(post.url)">{{ post.title }}</div>
-      </h2>
-      <time>{{ formatPostDate(post.date) }}</time>
-      <div class="brief" home-content v-html="post.brief"></div>
-    </article>
+    <template v-for="(post, idx) in recentPosts" :key="idx">
+      <article class="post">
+        <h2 class="title">
+          <div @click="goToArticle(post.url)">{{ post.title }}</div>
+        </h2>
+        <time>{{ formatPostDate(post.date) }}</time>
+        <div class="brief" home-content v-html="post.brief"></div>
+      </article>
+      <hr />
+    </template>
+    <footer @click="goToWhere">{{ footerText }}</footer>
   </div>
 </template>
 
 <script setup lang="ts">
 // import { data, IMetaPost } from "../../support/posts.data.mjs";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import { useFormatPost, usePostRoute } from "../../compositions/post";
+import {
+  themeConfig,
+  homeFooterDefault,
+} from "../../compositions/configProvider";
+import { useRouter } from "vitepress";
 
 const { posts } = usePosts();
+const router = useRouter();
 const recentPosts = computed(() => posts.all.slice(0, 7));
 const { formatPostDate } = useFormatPost();
 const { goToArticle } = usePostRoute();
+
+const { footer = homeFooterDefault } = inject(themeConfig)!;
+const footerText = computed(() => {
+  if ((footer as any).default) {
+    return (footer.text as (count: number) => string)(posts.all.length);
+  }
+  return footer.text;
+});
+
+const goToWhere = () => {
+  router.go(`/${footer.route}`);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -31,6 +53,15 @@ const { goToArticle } = usePostRoute();
     line-height: 1.2;
     margin: 0 0 16px 0;
     text-align: center;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    height: 0;
+    margin: 32px 0;
+    &:last-of-type {
+      display: none;
+    }
   }
   .post {
     display: flex;
@@ -51,6 +82,13 @@ const { goToArticle } = usePostRoute();
       color: #616e7c;
       margin-bottom: 8px;
     }
+  }
+  footer {
+    margin-top: 32px;
+    padding: 28px 36px;
+    background: #f1f2f4;
+    border-radius: 6px;
+    cursor: pointer;
   }
 }
 </style>

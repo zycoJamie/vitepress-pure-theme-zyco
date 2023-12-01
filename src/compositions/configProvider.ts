@@ -8,9 +8,15 @@ export const themeConfig: InjectionKey<PureThemeConfig> = Symbol("themeConfig");
 export const configProvider = (component: Component) => {
   return defineComponent(() => {
     const { theme } = useData();
-    console.log(theme.value);
     provide(themeConfig, theme.value);
 
     return () => h(component, null, {});
   });
+};
+
+// 主页底部默认配置
+export const homeFooterDefault = {
+  text: (count: number) => `查看全部(${count}篇)文章`,
+  route: "articles",
+  default: true,
 };
