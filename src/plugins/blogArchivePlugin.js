@@ -1,11 +1,10 @@
 import { resolve, normalize, basename } from "node:path";
 import { readdir, copyFile, readFile, rm, constants } from "node:fs/promises";
-import { cwd } from "node:process";
 import matter from "gray-matter";
 import { normalizePath } from "vite";
 import MarkdownIt from "markdown-it";
 
-export default function blogArchivePlugin(config) {
+export default function blogArchivePlugin() {
   const virtualModule = "virtual:blog/archive/usePosts";
   const resolvedVirtualModule = "\0" + virtualModule;
   let viteConfig = null;
@@ -23,14 +22,16 @@ export default function blogArchivePlugin(config) {
     name: "vite-plugin-vitepress-blog-archive",
     enforce: "post",
     async buildStart() {
-      const postDir = resolve(
-        cwd(),
-        `./${normalize(config.postDir || "/posts")}`
-      );
+      // project root of the VitePress site
+      const rootDoc = global.VITEPRESS_CONFIG.root;
+      // 用户主题配置中设置的博客目录
+      const userConfigPostDir =
+        globalThis.VITEPRESS_CONFIG.site.themeConfig.postDir || "/posts";
+      const postDir = resolve(rootDoc, `./${normalize(userConfigPostDir)}`);
 
       // POSIX规范的博客路径
       const postDirWithoutCwd = `${normalizePath(
-        `/${normalizePath(config.postDir || "/posts")}`
+        `/${normalizePath(userConfigPostDir)}`
       )}`;
 
       let fileList = await readdir(postDir, { withFileTypes: true });

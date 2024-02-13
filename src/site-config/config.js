@@ -22,7 +22,7 @@ export const baseConfig = {
     },
   },
   vite: {
-    plugins: [blogArchivePlugin({ postDir: "/posts" })],
+    plugins: [blogArchivePlugin()],
     optimizeDeps: {
       /**
        * 开发模式下，Symbol变量被提取进入单独模块，导致存在两个同名的Symbol变量
