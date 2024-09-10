@@ -71,7 +71,7 @@ export default function blogArchivePlugin() {
           return {
             ...(frontMatter.data || {}),
             fileName: item.fileName,
-            brief: brief ? `${brief.slice(0, 100)}......` : "",
+            brief: brief ? `${brief.slice(0, 100)}` : "",
           };
         });
 

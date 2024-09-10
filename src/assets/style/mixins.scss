@@ -26,3 +26,7 @@
     background: transparent;
   }
 }
+
+@mixin rotate($timing: 3s, $interpolator: linear) {
+  animation: rotate $timing $interpolator infinite;
+}

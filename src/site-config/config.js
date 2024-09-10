@@ -5,10 +5,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const packagePath = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../package.json"
-);
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const packagePath = path.resolve(dirname, "../../package.json");
 const PackageJson = JSON.parse(fs.readFileSync(packagePath));
 
 export const baseConfig = {
@@ -22,6 +20,16 @@ export const baseConfig = {
     },
   },
   vite: {
+    resolve: {
+      alias: {
+        "@style-theme": path.resolve(
+          dirname,
+          "..",
+          "..",
+          "./src/assets/style"
+        ),
+      },
+    },
     plugins: [blogArchivePlugin()],
     optimizeDeps: {
       /**
