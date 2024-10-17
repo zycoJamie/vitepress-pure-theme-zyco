@@ -3,3 +3,5 @@ declare module "*.vue" {
   const c: DefineComponent;
   export default c;
 }
+
+declare module "valine";

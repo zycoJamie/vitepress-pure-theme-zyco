@@ -1,7 +1,8 @@
-import { Ref, computed } from "vue";
+import { Ref, computed, onMounted } from "vue";
 import type { IMetaPost } from "../support/posts.data.mjs";
-import { useRouter } from "vitepress";
+import { useData, useRouter } from "vitepress";
 import { MONTH_MAP_ABBR } from "../support/utils";
+import type { PureThemeConfig } from "../config";
 
 // blog排序
 export const useSortPosts = <T extends IMetaPost[]>(posts: Ref<T>) => {
@@ -47,4 +48,25 @@ export const usePostRoute = () => {
       router.go(path);
     },
   };
+};
+
+// 初始化valine
+export const useValine = () => {
+  onMounted(() => {
+    const { theme } = useData<PureThemeConfig>();
+    import("valine").then(({ default: Valine }) => {
+      if (theme.value?.valine) {
+        if (!theme.value?.valine?.appId || !theme.value?.valine?.appKey) {
+          console.error("请配置valine的appId和appKey");
+          return null;
+        }
+        const inst = new Valine({
+          appId: theme.value.valine.appId,
+          appKey: theme.value.valine.appKey,
+          visitor: true,
+        });
+        return inst;
+      }
+    });
+  });
 };

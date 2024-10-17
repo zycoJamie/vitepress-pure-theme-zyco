@@ -23,4 +23,13 @@ export interface PureThemeConfig {
      */
     links?: { icon: string; url?: string; description: string }[];
   };
+  /**
+   * 如果想开启文章阅读量统计需要添加下面配置
+   * valine是基于LeanCloud的无后端评论系统 详见文档 https://valine.js.org/
+   * 在LeanCloud创建应用，填入appId，appKey
+   */
+  valine?: {
+    appId: string;
+    appKey: string;
+  };
 }

@@ -61,9 +61,9 @@ const handleMouseLeaveTag = (tag: string) => {
 
 .post-class-container {
   position: fixed;
-  left: 200px;
+  left: 176px;
   top: 270px;
-  padding: 8px 16px;
+  padding: 8px 16px 8px 0px;
   display: grid;
   gap: 10px 0px;
   grid-template-columns: repeat(3, 1fr);
