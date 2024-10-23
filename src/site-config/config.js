@@ -36,6 +36,7 @@ export const baseConfig = {
     },
     plugins: [blogArchivePlugin()],
     optimizeDeps: {
+      include: [`${PackageJson.name} > valine`],
       /**
        * 开发模式下，Symbol变量被提取进入单独模块，导致存在两个同名的Symbol变量
        * 详情：https://github.com/vuejs/vitepress/issues/3292
