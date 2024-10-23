@@ -1,6 +1,6 @@
 {
   "name": "vitepress-pure-theme-zyco",
-  "version": "0.3.0",
+  "version": "0.3.1-patch.0",
   "description": "a pure theme base on vitepress",
   "main": "src/index.ts",
   "types": "src/index.ts",
