@@ -90,7 +90,6 @@ const handleMouseLeaveTag = (tag: string) => {
     }
 
     &:hover {
-      color: val.$anchor-color;
       transform: scale(1.2);
       transition: transform 0.3 ease;
     }

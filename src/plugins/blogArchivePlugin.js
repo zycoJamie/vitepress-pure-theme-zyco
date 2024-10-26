@@ -18,6 +18,7 @@ export default function blogArchivePlugin() {
   const DEFAULT_CLASS = "class";
   const DEFAULT_YEAR = "2000";
   const mdInst = new MarkdownIt({ html: true });
+  const REF_END = "&ref:end&"; // 自定义“>“引用段落结束符号
   return {
     name: "vite-plugin-vitepress-blog-archive",
     enforce: "post",
@@ -57,21 +58,60 @@ export default function blogArchivePlugin() {
           let brief = "";
           mdInst.parseInline(frontMatter.content).map((inline) => {
             (inline.children ?? []).map((token) => {
-              if (token.type === "text" && !token.markup) {
-                /^(>\s*)+/gi.test(token.content) &&
-                  (token.content = ` <code>${token.content.replace(
-                    /^(>\s*)+/gi,
-                    ""
-                  )}</code> `);
-                brief += token.content;
+              if (
+                (token.type === "text" && !token.markup) ||
+                (token.type === "code_inline" && token.markup === "``")
+              ) {
+                let content = token.content;
+                if (
+                  /^(>\s*)+/gi.test(token.content) &&
+                  inline.content.includes("\\" + token.content)
+                ) {
+                  brief += "\\";
+                } else if (/^(>\s*)+/gi.test(token.content)) {
+                  content += REF_END;
+                }
+                brief += content;
               }
             });
           });
 
+          if (brief) {
+            // 处理所有‘#’
+            let newBrief = brief.replaceAll("#", "");
+            // 判断 brief 截取字符后是否截断了 REF_END
+            newBrief = newBrief.slice(0, 100);
+            let briefTemp = brief.slice(92, 108);
+            if (briefTemp.includes(REF_END)) {
+              // 拼上REF_END被截断的部分
+              newBrief += REF_END.slice(
+                99 - 92 - briefTemp.indexOf(REF_END) + 1
+              );
+            }
+            // 处理多余的'>'
+            const restRefIdx = newBrief.lastIndexOf(">");
+            if (
+              restRefIdx > newBrief.lastIndexOf(REF_END) &&
+              (!~newBrief.lastIndexOf("\\>") ||
+                newBrief.lastIndexOf("\\>") + 1 !== restRefIdx)
+            ) {
+              newBrief =
+                newBrief.slice(0, restRefIdx) +
+                "\0" +
+                newBrief.slice(restRefIdx + 1);
+            }
+
+            const refRE = new RegExp(`(?<!\\\\)(>\s*(.*?)${REF_END})`, "ig");
+            brief = newBrief.replace(refRE, (_, __, wrapped) => {
+              wrapped = wrapped.trim();
+              return wrapped ? ` <code>${wrapped}</code> ` : wrapped;
+            });
+          }
+
           return {
             ...(frontMatter.data || {}),
             fileName: item.fileName,
-            brief: brief ? `${brief.slice(0, 100)}` : "",
+            brief: brief ? `${brief}...` : "",
           };
         });
 

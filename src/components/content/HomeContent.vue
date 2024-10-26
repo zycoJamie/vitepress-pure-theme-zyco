@@ -48,41 +48,50 @@ const goToWhere = () => {
 .content {
   margin: auto;
   max-width: 700px;
+
   .main-title {
     font-size: 2.8rem;
     line-height: 1.2;
     margin: 0 0 16px 0;
     text-align: center;
   }
+
   hr {
     border: none;
     border-top: 1px solid #ddd;
     height: 0;
     margin: 32px 0;
+
     &:last-of-type {
       display: none;
     }
   }
+
   .post {
     display: flex;
     flex-direction: column;
+
     .title {
       font-size: 1.618rem;
       line-height: 1.4;
-      & > div {
+
+      &>div {
         text-decoration: none;
         color: #27272a;
         transition: color 0.1s ease;
+
         &:hover {
           color: #a0a1a7;
         }
       }
     }
+
     time {
       color: #616e7c;
       margin-bottom: 8px;
     }
   }
+
   footer {
     margin-top: 32px;
     padding: 28px 36px;
@@ -94,6 +103,7 @@ const goToWhere = () => {
 </style>
 <style lang="scss">
 @use "../../assets/style/variables.scss" as val;
+
 .post {
   .brief[home-content] {
     code {
@@ -102,7 +112,7 @@ const goToWhere = () => {
       font-size: 0.8rem;
       font-variant-ligatures: none;
       padding: 3px 5px;
-      white-space: pre;
+      white-space: pre-wrap;
       -webkit-font-smoothing: auto;
       font-family: "JetBrains Mono", Menlo, Consolas, Monaco, "Courier New",
         monospace;
